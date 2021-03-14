@@ -10,14 +10,6 @@ from .models import Post
 from .serializers import PostSerializer
 
 
-class PostView(mixins.ListModelMixin, generics.GenericAPIView):
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        return self.list(self, request, *args, **kwargs)
-
-
 # class TestView(APIView):
 #     permission_classes = (IsAuthenticated,)
 
@@ -32,3 +24,16 @@ class PostView(mixins.ListModelMixin, generics.GenericAPIView):
 #             serializer.save()
 #             return Response(serializer.data)
 #         return Response(serializer.errors)
+
+
+class PostView(
+    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
+):
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
